@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+.next/
+*.pyo
+dist/
+build/
+*.egg-info/
+
+# Environment & Secrets
+.env
+.env.local
+.env*.local
+backend/.env
+backend/.env.local
+
+# Local storage (dev artifacts)
+backend/local_storage/
+backend/pw-browsers/
+backend.log
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (keeping only main README)
+docs/
+architecture/
+
+# Dev/Build artifacts
+.kiro/
+dist/
+build/
+.cache/
+.pytest_cache/
+
+# Node build
+next-env.d.ts
+.next/
+
+# Frontend build
+frontend/.next/
+frontend/out/
+
+# Backend
+backend/venv/
+backend/.venv/

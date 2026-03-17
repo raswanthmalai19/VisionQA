@@ -1,0 +1,55 @@
+steps:
+  # Build backend
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/visionqa-backend", "./backend"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/visionqa-backend"]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - visionqa-backend
+      - --image=gcr.io/$PROJECT_ID/visionqa-backend
+      - --region=us-central1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --memory=1Gi
+      - --cpu=2
+      - --max-instances=10
+      - --min-instances=0
+      - --port=8000
+      - --timeout=600
+      - --set-env-vars=VISIONQA_GCP_PROJECT_ID=$PROJECT_ID,VISIONQA_GCP_REGION=us-central1,VISIONQA_FRONTEND_URL=https://visionqa-frontend-HASH-uc.a.run.app
+
+  # Build frontend
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/visionqa-frontend", "./frontend"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/visionqa-frontend"]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - visionqa-frontend
+      - --image=gcr.io/$PROJECT_ID/visionqa-frontend
+      - --region=us-central1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --memory=512Mi
+      - --cpu=1
+      - --max-instances=5
+      - --min-instances=0
+      - --port=3000
+
+images:
+  - "gcr.io/$PROJECT_ID/visionqa-backend"
+  - "gcr.io/$PROJECT_ID/visionqa-frontend"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
